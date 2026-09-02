@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderHighlights();
     renderStats();
     renderSkills();
-    renderProjects('all');
     renderTimeline();
     renderContact();
   }
@@ -23,8 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypingEffect();
   initMobileMenu();
   initScrollEffects();
-  initProjectFilters();
-  initModal();
   initCopyEmail();
   initBackToTop();
 });
@@ -167,90 +164,6 @@ function renderSkills() {
 
   const toolsContainer = document.getElementById('skills-tools');
   if (toolsContainer && skills.tools) toolsContainer.innerHTML = renderList(skills.tools);
-}
-
-function renderProjects(filter = 'all') {
-  const container = document.getElementById('projects-grid');
-  if (!container || !portfolioData.projects) return;
-
-  const filtered = filter === 'all' 
-    ? portfolioData.projects 
-    : portfolioData.projects.filter(p => p.category === filter);
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div class="col-span-full py-12 text-center text-gray-500 dark:text-gray-400">
-        해당 카테고리의 분석 자료가 없습니다.
-      </div>
-    `;
-    return;
-  }
-
-  const categoryNames = {
-    financial: '재무회계 & 분석',
-    cost: '원가관리 & 손익',
-    tax: '세무회계 & 세법'
-  };
-
-  container.innerHTML = filtered.map(p => `
-    <div class="glass-card rounded-2xl overflow-hidden flex flex-col group reveal transition-all duration-300">
-      <!-- Thumbnail -->
-      <div class="relative overflow-hidden aspect-video bg-gray-100 dark:bg-gray-800">
-        <img src="${p.thumbnail}" alt="${p.title}" 
-             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-             loading="lazy" />
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
-          <span class="text-xs font-semibold px-2.5 py-1 rounded bg-blue-600 text-white shadow">
-            ${categoryNames[p.category] || '회계 분석'}
-          </span>
-          <button onclick="openProjectModal('${p.id}')" 
-                  class="px-3 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-semibold rounded-lg transition-colors">
-            상세 보고서 보기 <i class="fa-solid fa-arrow-right ml-1"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Content -->
-      <div class="p-6 flex-1 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
-              ${categoryNames[p.category] || p.category}
-            </span>
-            <span class="text-xs text-gray-500 dark:text-gray-400 font-mono">${p.period}</span>
-          </div>
-          
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
-            ${p.title}
-          </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-4 leading-relaxed">
-            ${p.description}
-          </p>
-        </div>
-
-        <div>
-          <!-- Tags -->
-          <div class="flex flex-wrap gap-1.5 mb-4">
-            ${p.tags.map(tag => `
-              <span class="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50">
-                #${tag}
-              </span>
-            `).join('')}
-          </div>
-
-          <!-- Bottom Action -->
-          <div class="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs">
-            <button onclick="openProjectModal('${p.id}')" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline inline-flex items-center gap-1">
-              분석 내용 상세보기 <i class="fa-solid fa-chevron-right text-[10px]"></i>
-            </button>
-            <span class="text-gray-400 text-xs font-medium">강원대 회계학과</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  observeReveals();
 }
 
 function renderTimeline() {
@@ -399,111 +312,6 @@ function observeReveals() {
   });
 
   reveals.forEach(el => observer.observe(el));
-}
-
-// Project Category Filters
-function initProjectFilters() {
-  const filterBtns = document.querySelectorAll('.project-filter-btn');
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => {
-        b.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
-        b.classList.add('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-800');
-      });
-
-      btn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
-      btn.classList.remove('text-gray-600', 'dark:text-gray-300', 'hover:bg-gray-200', 'dark:hover:bg-gray-800');
-
-      const filter = btn.getAttribute('data-filter');
-      renderProjects(filter);
-    });
-  });
-}
-
-// Project Modal Details
-window.openProjectModal = function(projectId) {
-  const modal = document.getElementById('project-modal');
-  const modalBody = document.getElementById('modal-content');
-  if (!modal || !modalBody || !portfolioData.projects) return;
-
-  const project = portfolioData.projects.find(p => p.id === projectId);
-  if (!project) return;
-
-  const categoryNames = {
-    financial: '재무회계 & 재무제표 분석',
-    cost: '원가관리회계 & 손익분기점(BEP)',
-    tax: '세무회계 & 세무조정'
-  };
-
-  modalBody.innerHTML = `
-    <div class="relative aspect-video rounded-xl overflow-hidden mb-6 bg-gray-950">
-      <img src="${project.thumbnail}" alt="${project.title}" class="w-full h-full object-cover" />
-    </div>
-
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-      <div>
-        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
-          ${categoryNames[project.category] || '회계 학술 과제'}
-        </span>
-        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-2">${project.title}</h3>
-      </div>
-      <span class="text-sm font-mono text-gray-500 dark:text-gray-400">${project.period}</span>
-    </div>
-
-    <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-6 whitespace-pre-line">
-      ${project.longDescription || project.description}
-    </p>
-
-    ${project.highlights && project.highlights.length > 0 ? `
-      <div class="mb-6 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
-        <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-chart-line text-blue-500"></i> 주요 분석 내용 및 성과
-        </h4>
-        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
-          ${project.highlights.map(h => `<li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> <span>${h}</span></li>`).join('')}
-        </ul>
-      </div>
-    ` : ''}
-
-    <div class="mb-6">
-      <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">🏷️ 핵심 전공 키워드</h4>
-      <div class="flex flex-wrap gap-2">
-        ${project.tags.map(t => `<span class="text-xs px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">#${t}</span>`).join('')}
-      </div>
-    </div>
-
-    <div class="pt-4 border-t border-gray-200 dark:border-gray-800 flex justify-end">
-      <button onclick="document.getElementById('project-modal').classList.add('hidden'); document.body.style.overflow='auto';" 
-              class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-all">
-        확인 완료
-      </button>
-    </div>
-  `;
-
-  modal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-};
-
-function initModal() {
-  const modal = document.getElementById('project-modal');
-  const closeBtn = document.getElementById('close-modal-btn');
-  const backdrop = document.getElementById('modal-backdrop');
-
-  if (!modal) return;
-
-  function closeModal() {
-    modal.classList.add('hidden');
-    document.body.style.overflow = 'auto';
-  }
-
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (backdrop) backdrop.addEventListener('click', closeModal);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-      closeModal();
-    }
-  });
 }
 
 // Copy Email & Toast Notification
