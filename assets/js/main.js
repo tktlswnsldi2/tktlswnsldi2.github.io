@@ -1,14 +1,14 @@
 /**
  * ==========================================================================
- * Main Application Logic (main.js)
+ * Main Application Logic (main.js) - 회계학 전공 포트폴리오
  * ==========================================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. 테마 초기화 및 이벤트 리스너
+  // 1. 테마 초기화
   initTheme();
 
-  // 2. data.js 데이터를 이용한 렌더링
+  // 2. data.js 데이터 렌더링
   if (typeof portfolioData !== 'undefined') {
     renderProfile();
     renderHighlights();
@@ -80,42 +80,34 @@ function renderProfile() {
   const heroName = document.getElementById('hero-name');
   if (heroName) heroName.textContent = profile.name;
 
+  const heroEnglishName = document.getElementById('hero-english-name');
+  if (heroEnglishName) heroEnglishName.textContent = `(${profile.englishName})`;
+
   const heroBio = document.getElementById('hero-bio');
   if (heroBio) heroBio.textContent = profile.shortBio;
-
-  const heroAvatar = document.getElementById('hero-avatar');
-  if (heroAvatar) {
-    heroAvatar.src = profile.avatar;
-    heroAvatar.alt = profile.name;
-  }
 
   const statusBadge = document.getElementById('status-badge');
   if (statusBadge && profile.status?.available) {
     statusBadge.innerHTML = `
       <span class="flex h-2.5 w-2.5 relative">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
       </span>
-      <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">${profile.status.text}</span>
+      <span class="text-xs font-semibold text-blue-700 dark:text-blue-300">${profile.status.text}</span>
     `;
   }
 
   // Social Icons Container
   const socialContainer = document.getElementById('hero-social-links');
-  if (socialContainer) {
+  if (socialContainer && socialLinks) {
     socialContainer.innerHTML = socialLinks.map(link => `
-      <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
-         class="p-3 text-lg rounded-xl glass-card text-gray-600 dark:text-gray-300 ${link.color} transition-all duration-300 hover:scale-110"
-         title="${link.name}" aria-label="${link.name}">
-        <i class="${link.icon}"></i>
+      <a href="${link.url}" 
+         class="px-4 py-2 text-sm font-semibold rounded-xl glass-card text-gray-700 dark:text-gray-200 ${link.color} transition-all duration-300 hover:scale-105 flex items-center gap-2 shadow-sm"
+         title="${link.name}">
+        <i class="${link.icon} text-base text-blue-500"></i>
+        <span>${link.name}</span>
       </a>
     `).join('');
-  }
-
-  // Resume link
-  const resumeBtn = document.getElementById('btn-resume');
-  if (resumeBtn) {
-    resumeBtn.href = profile.resumeUrl || '#';
   }
 }
 
@@ -125,7 +117,7 @@ function renderHighlights() {
 
   container.innerHTML = portfolioData.highlights.map(item => `
     <div class="glass-card p-6 rounded-2xl reveal flex flex-col items-start gap-4">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-500/10 text-blue-500 text-xl">
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xl">
         <i class="${item.icon}"></i>
       </div>
       <div>
@@ -142,7 +134,7 @@ function renderStats() {
 
   container.innerHTML = portfolioData.stats.map(stat => `
     <div class="text-center p-4 glass-card rounded-xl">
-      <div class="text-3xl font-extrabold text-blue-600 dark:text-blue-400 mb-1">${stat.value}</div>
+      <div class="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400 mb-1">${stat.value}</div>
       <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">${stat.label}</div>
     </div>
   `).join('');
@@ -152,14 +144,7 @@ function renderSkills() {
   const { skills } = portfolioData;
   const renderList = (items) => items.map(skill => {
     const isFontAwesome = skill.icon && skill.icon.startsWith('fa-');
-    const isImgUrl = skill.icon && (skill.icon.startsWith('http') || skill.icon.startsWith('/'));
-
-    let iconHtml = '<i class="fa-solid fa-check-circle text-blue-500 text-lg"></i>';
-    if (isFontAwesome) {
-      iconHtml = `<i class="${skill.icon} text-lg text-blue-500"></i>`;
-    } else if (isImgUrl) {
-      iconHtml = `<img src="${skill.icon}" alt="${skill.name}" class="w-6 h-6 object-contain group-hover:scale-110 transition-transform duration-300" onerror="this.outerHTML='<i class=\\'fa-solid fa-check-circle text-blue-500 text-lg\\'></i>';" />`;
-    }
+    let iconHtml = `<i class="${isFontAwesome ? skill.icon : 'fa-solid fa-check-circle'} text-base text-blue-500"></i>`;
 
     return `
       <div class="group relative flex items-center gap-3 p-3.5 rounded-xl glass-card transition-all duration-300 hover:border-blue-500/40">
@@ -168,20 +153,20 @@ function renderSkills() {
         </div>
         <div class="flex-1 min-w-0">
           <div class="text-sm font-semibold text-gray-900 dark:text-white truncate">${skill.name}</div>
-          <div class="text-xs text-blue-600/80 dark:text-blue-400/80">${skill.level}</div>
+          <div class="text-xs font-medium text-blue-600/80 dark:text-blue-400/80">${skill.level}</div>
         </div>
       </div>
     `;
   }).join('');
 
-  const feContainer = document.getElementById('skills-frontend');
-  if (feContainer && skills.frontend) feContainer.innerHTML = renderList(skills.frontend);
+  const finContainer = document.getElementById('skills-financial');
+  if (finContainer && skills.financial) finContainer.innerHTML = renderList(skills.financial);
 
-  const beContainer = document.getElementById('skills-backend');
-  if (beContainer && skills.backend) beContainer.innerHTML = renderList(skills.backend);
+  const taxContainer = document.getElementById('skills-tax');
+  if (taxContainer && skills.tax) taxContainer.innerHTML = renderList(skills.tax);
 
   const toolsContainer = document.getElementById('skills-tools');
-  if (toolsContainer && skills.devops_tools) toolsContainer.innerHTML = renderList(skills.devops_tools);
+  if (toolsContainer && skills.tools) toolsContainer.innerHTML = renderList(skills.tools);
 }
 
 function renderProjects(filter = 'all') {
@@ -195,11 +180,17 @@ function renderProjects(filter = 'all') {
   if (filtered.length === 0) {
     container.innerHTML = `
       <div class="col-span-full py-12 text-center text-gray-500 dark:text-gray-400">
-        해당 카테고리의 프로젝트가 없습니다.
+        해당 카테고리의 분석 자료가 없습니다.
       </div>
     `;
     return;
   }
+
+  const categoryNames = {
+    financial: '재무회계 & 분석',
+    cost: '원가관리 & 손익',
+    tax: '세무회계 & 세법'
+  };
 
   container.innerHTML = filtered.map(p => `
     <div class="glass-card rounded-2xl overflow-hidden flex flex-col group reveal transition-all duration-300">
@@ -209,23 +200,12 @@ function renderProjects(filter = 'all') {
              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
              loading="lazy" />
         <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
-          <div class="flex gap-2">
-            ${p.demoUrl && p.demoUrl !== '#' ? `
-              <a href="${p.demoUrl}" target="_blank" rel="noopener noreferrer" 
-                 class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-lg flex items-center gap-1.5">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Demo
-              </a>
-            ` : ''}
-            ${p.githubUrl && p.githubUrl !== '#' ? `
-              <a href="${p.githubUrl}" target="_blank" rel="noopener noreferrer" 
-                 class="px-3 py-1.5 bg-gray-900/90 hover:bg-black text-white text-xs font-semibold rounded-lg shadow-lg flex items-center gap-1.5">
-                <i class="fa-brands fa-github"></i> Code
-              </a>
-            ` : ''}
-          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded bg-blue-600 text-white shadow">
+            ${categoryNames[p.category] || '회계 분석'}
+          </span>
           <button onclick="openProjectModal('${p.id}')" 
-                  class="px-3 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-semibold rounded-lg">
-            자세히 보기
+                  class="px-3 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-semibold rounded-lg transition-colors">
+            상세 보고서 보기 <i class="fa-solid fa-arrow-right ml-1"></i>
           </button>
         </div>
       </div>
@@ -234,54 +214,42 @@ function renderProjects(filter = 'all') {
       <div class="p-6 flex-1 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between gap-2 mb-2">
-            <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 uppercase tracking-wide">
-              ${p.category}
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
+              ${categoryNames[p.category] || p.category}
             </span>
             <span class="text-xs text-gray-500 dark:text-gray-400 font-mono">${p.period}</span>
           </div>
           
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
             ${p.title}
           </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-4">
+          <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-4 leading-relaxed">
             ${p.description}
           </p>
         </div>
 
         <div>
-          <!-- Tech Tags -->
+          <!-- Tags -->
           <div class="flex flex-wrap gap-1.5 mb-4">
             ${p.tags.map(tag => `
-              <span class="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50">
-                ${tag}
+              <span class="text-xs px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50">
+                #${tag}
               </span>
             `).join('')}
           </div>
 
           <!-- Bottom Action -->
-          <div class="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-            <button onclick="openProjectModal('${p.id}')" class="text-blue-600 dark:text-blue-400 font-medium hover:underline inline-flex items-center gap-1">
-              상세 설명 보기 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+          <div class="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs">
+            <button onclick="openProjectModal('${p.id}')" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline inline-flex items-center gap-1">
+              분석 내용 상세보기 <i class="fa-solid fa-chevron-right text-[10px]"></i>
             </button>
-            <div class="flex items-center gap-3">
-              ${p.githubUrl && p.githubUrl !== '#' ? `
-                <a href="${p.githubUrl}" target="_blank" rel="noopener noreferrer" class="hover:text-gray-900 dark:hover:text-white" title="GitHub">
-                  <i class="fa-brands fa-github text-sm"></i>
-                </a>
-              ` : ''}
-              ${p.demoUrl && p.demoUrl !== '#' ? `
-                <a href="${p.demoUrl}" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 dark:hover:text-blue-400" title="Live Demo">
-                  <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
-                </a>
-              ` : ''}
-            </div>
+            <span class="text-gray-400 text-xs font-medium">강원대 회계학과</span>
           </div>
         </div>
       </div>
     </div>
   `).join('');
 
-  // Re-observe revealed items
   observeReveals();
 }
 
@@ -336,7 +304,7 @@ function renderContact() {
   const footerCopyright = document.getElementById('footer-copyright');
   if (footerCopyright) {
     const year = new Date().getFullYear();
-    footerCopyright.innerHTML = `&copy; ${year} ${profile.englishName || profile.name}. All rights reserved.`;
+    footerCopyright.innerHTML = `&copy; ${year} ${profile.name} (${profile.englishName}) · 강원대학교 회계학과. All rights reserved.`;
   }
 }
 
@@ -360,15 +328,15 @@ function initTypingEffect() {
     if (isDeleting) {
       target.textContent = currentWord.substring(0, charIndex - 1);
       charIndex--;
-      typeSpeed = 50;
+      typeSpeed = 45;
     } else {
       target.textContent = currentWord.substring(0, charIndex + 1);
       charIndex++;
-      typeSpeed = 120;
+      typeSpeed = 110;
     }
 
     if (!isDeleting && charIndex === currentWord.length) {
-      typeSpeed = 2000; // Pause at end of word
+      typeSpeed = 2200; // Pause at end of word
       isDeleting = true;
     } else if (isDeleting && charIndex === 0) {
       isDeleting = false;
@@ -461,6 +429,12 @@ window.openProjectModal = function(projectId) {
   const project = portfolioData.projects.find(p => p.id === projectId);
   if (!project) return;
 
+  const categoryNames = {
+    financial: '재무회계 & 재무제표 분석',
+    cost: '원가관리회계 & 손익분기점(BEP)',
+    tax: '세무회계 & 세무조정'
+  };
+
   modalBody.innerHTML = `
     <div class="relative aspect-video rounded-xl overflow-hidden mb-6 bg-gray-950">
       <img src="${project.thumbnail}" alt="${project.title}" class="w-full h-full object-cover" />
@@ -468,8 +442,8 @@ window.openProjectModal = function(projectId) {
 
     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
       <div>
-        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 uppercase">
-          ${project.category}
+        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
+          ${categoryNames[project.category] || '회계 학술 과제'}
         </span>
         <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-2">${project.title}</h3>
       </div>
@@ -481,34 +455,28 @@ window.openProjectModal = function(projectId) {
     </p>
 
     ${project.highlights && project.highlights.length > 0 ? `
-      <div class="mb-6">
-        <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">💡 주요 구현 및 성과</h4>
-        <ul class="space-y-1.5 text-sm text-gray-600 dark:text-gray-300">
+      <div class="mb-6 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
+        <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-chart-line text-blue-500"></i> 주요 분석 내용 및 성과
+        </h4>
+        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
           ${project.highlights.map(h => `<li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> <span>${h}</span></li>`).join('')}
         </ul>
       </div>
     ` : ''}
 
     <div class="mb-6">
-      <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">🛠️ 사용 기술</h4>
+      <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">🏷️ 핵심 전공 키워드</h4>
       <div class="flex flex-wrap gap-2">
-        ${project.tags.map(t => `<span class="text-xs px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">${t}</span>`).join('')}
+        ${project.tags.map(t => `<span class="text-xs px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">#${t}</span>`).join('')}
       </div>
     </div>
 
-    <div class="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-800">
-      ${project.demoUrl && project.demoUrl !== '#' ? `
-        <a href="${project.demoUrl}" target="_blank" rel="noopener noreferrer" 
-           class="flex-1 py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-center text-sm shadow-md transition-all flex items-center justify-center gap-2">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> 라이브 데모 방문
-        </a>
-      ` : ''}
-      ${project.githubUrl && project.githubUrl !== '#' ? `
-        <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" 
-           class="flex-1 py-2.5 px-4 bg-gray-900 hover:bg-black dark:bg-gray-800 dark:hover:bg-gray-700 text-white font-semibold rounded-xl text-center text-sm shadow-md transition-all flex items-center justify-center gap-2">
-          <i class="fa-brands fa-github"></i> GitHub 소스코드
-        </a>
-      ` : ''}
+    <div class="pt-4 border-t border-gray-200 dark:border-gray-800 flex justify-end">
+      <button onclick="document.getElementById('project-modal').classList.add('hidden'); document.body.style.overflow='auto';" 
+              class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-all">
+        확인 완료
+      </button>
     </div>
   `;
 
@@ -547,7 +515,7 @@ function initCopyEmail() {
     btn.addEventListener('click', () => {
       const email = portfolioData.profile.email;
       navigator.clipboard.writeText(email).then(() => {
-        showToast(`이메일 주소(${email})가 복사되었습니다! 🎉`);
+        showToast(`이영준 님의 이메일 주소(${email})가 복사되었습니다! ✉️`);
       }).catch(() => {
         showToast(`이메일: ${email}`);
       });

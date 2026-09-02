@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이영준 | 강원대학교 회계학과 포트폴리오</title>
-  <meta name="description" content="강원대학교 강릉캠퍼스 회계학과 2학년 이영준의 개인 포트폴리오 웹사이트입니다." />
+  <title>이영준 (Lee Young-jun) | 강원대학교 회계학과 포트폴리오</title>
+  <meta name="description" content="강원대학교 강릉캠퍼스 회계학과 2학년 이영준의 학술 및 역량 포트폴리오입니다." />
   <meta name="author" content="이영준 (Youngjun Lee)" />
 
   <!-- Open Graph / SEO -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="이영준 | 강원대학교 회계학과 포트폴리오" />
-  <meta property="og:description" content="강원대학교 강릉캠퍼스 회계학과 2학년 이영준의 홈페이지입니다." />
+  <meta property="og:description" content="강원대학교 강릉캠퍼스 회계학과 2학년 이영준의 개인 포트폴리오 웹사이트입니다." />
   <meta property="og:url" content="https://tktlswnsldi2.github.io" />
 
   <!-- Google Fonts & Pretendard -->
@@ -68,28 +68,31 @@
   <header class="sticky top-0 z-40 w-full glass-nav transition-all duration-300">
     <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
       <!-- Logo / Name -->
-      <a href="#" class="flex items-center gap-2 group">
-        <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
-          <i class="fa-solid fa-graduation-cap text-base"></i>
+      <a href="#" class="flex items-center gap-3 group">
+        <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-scale-balanced text-base"></i>
         </span>
         <div class="flex flex-col">
-          <span id="nav-name" class="font-bold text-lg tracking-tight text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            이영준
-          </span>
-          <span class="text-[11px] font-medium text-gray-500 dark:text-gray-400">강원대학교 회계학과</span>
+          <div class="flex items-center gap-1.5">
+            <span id="nav-name" class="font-extrabold text-xl tracking-tight text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              이영준
+            </span>
+            <span class="text-xs text-gray-400 font-medium">(Lee Young-jun)</span>
+          </div>
+          <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">강원대학교 회계학과 2학년</span>
         </div>
       </a>
 
       <!-- Desktop Navigation Menu -->
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600 dark:text-gray-300">
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600 dark:text-gray-300">
         <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">소개 (About)</a>
-        <a href="#skills" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">역량 & 전공 (Skills)</a>
-        <a href="#projects" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">학술 & 프로젝트 (Projects)</a>
-        <a href="#experience" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">활동 & 이력 (Journey)</a>
+        <a href="#skills" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">전공 역량 (Skills)</a>
+        <a href="#projects" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">학술 분석 (Projects)</a>
+        <a href="#experience" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">학업 이력 (Journey)</a>
         <a href="#contact" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">연락처 (Contact)</a>
       </nav>
 
-      <!-- Action Buttons (Theme Toggle & GitHub) -->
+      <!-- Action Buttons (Theme Toggle & Contact) -->
       <div class="flex items-center gap-3">
         <!-- Theme Toggle Button -->
         <button type="button" class="theme-toggle p-2.5 rounded-xl glass-card text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none transition-colors" aria-label="Toggle theme">
@@ -97,10 +100,10 @@
           <i class="fa-solid fa-moon text-lg theme-icon-moon"></i>
         </button>
 
-        <!-- GitHub Profile Link -->
-        <a href="https://github.com/tktlswnsldi2" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all hover:shadow-lg hover:scale-105">
-          <i class="fa-brands fa-github text-base"></i>
-          <span>GitHub</span>
+        <!-- Email CTA Button -->
+        <a href="mailto:tktlswnsldi2@gmail.com" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all hover:shadow-lg hover:scale-105">
+          <i class="fa-solid fa-envelope text-sm"></i>
+          <span>이메일 문의</span>
         </a>
 
         <!-- Mobile Menu Toggle Button -->
@@ -113,9 +116,9 @@
     <!-- Mobile Drawer Menu -->
     <div id="mobile-menu" class="hidden md:hidden glass-nav border-t border-gray-200 dark:border-gray-800 px-6 py-4 space-y-3">
       <a href="#about" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">소개 (About)</a>
-      <a href="#skills" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">역량 & 전공 (Skills)</a>
-      <a href="#projects" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">학술 & 프로젝트 (Projects)</a>
-      <a href="#experience" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">활동 & 이력 (Journey)</a>
+      <a href="#skills" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">전공 역량 (Skills)</a>
+      <a href="#projects" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">학술 분석 (Projects)</a>
+      <a href="#experience" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">학업 이력 (Journey)</a>
       <a href="#contact" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">연락처 (Contact)</a>
     </div>
   </header>
@@ -131,78 +134,92 @@
           <!-- Populated by main.js -->
         </div>
 
-        <!-- Greeting & Name -->
-        <div class="space-y-2">
+        <!-- Greeting, Name & Role -->
+        <div class="space-y-3">
           <p id="hero-greeting" class="text-lg font-medium text-gray-600 dark:text-gray-400">
-            안녕하세요!
+            반갑습니다! 숫자를 통해 기업의 가치를 투명하게 분석하는
           </p>
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-            <span id="hero-name" class="text-gradient">이영준</span>입니다.
-          </h1>
-          <div class="h-10 text-xl sm:text-2xl font-mono font-semibold text-blue-600 dark:text-blue-400 flex items-center justify-center lg:justify-start">
+          <div class="flex flex-wrap items-baseline gap-3 justify-center lg:justify-start">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+              <span id="hero-name" class="text-gradient">이영준</span>
+            </h1>
+            <span id="hero-english-name" class="text-xl sm:text-2xl font-bold text-gray-400 dark:text-gray-500 font-sans">
+              (Youngjun Lee)
+            </span>
+          </div>
+          <div class="h-10 text-lg sm:text-xl font-semibold text-blue-600 dark:text-blue-400 flex items-center justify-center lg:justify-start">
             <span id="typing-text" class="typing-cursor"></span>
           </div>
         </div>
 
         <!-- Short Bio -->
         <p id="hero-bio" class="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-          강원대학교 강릉캠퍼스 회계학과 2학년에 재학 중인 이영준입니다.
+          강원대학교 강릉캠퍼스 회계학과 2학년에 재학 중인 이영준입니다. 재무회계, 원가관리회계, 세무회계 이론을 바탕으로 기업 재무 상태를 분석하고 신뢰할 수 있는 인사이트를 도출합니다.
         </p>
 
-        <!-- CTA Buttons & Social Icons -->
+        <!-- CTA Buttons -->
         <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
           <a href="#projects" class="w-full sm:w-auto px-7 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all text-center">
-            학술 & 프로젝트 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
+            학술 분석 과제 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
           </a>
           <a id="btn-resume" href="#contact" class="w-full sm:w-auto px-7 py-3.5 glass-card text-gray-800 dark:text-white font-semibold rounded-xl hover:border-blue-500/50 transition-all text-center">
             연락하기
           </a>
         </div>
 
-        <!-- Social Icons Row -->
-        <div id="hero-social-links" class="pt-4 flex items-center justify-center lg:justify-start gap-3">
+        <!-- Social / Contact Button Row -->
+        <div id="hero-social-links" class="pt-2 flex items-center justify-center lg:justify-start gap-3">
           <!-- Injected by main.js -->
         </div>
       </div>
 
-      <!-- Hero Visual Profile Card (사진 대신 세련된 대학/전공 엠블럼 카드) -->
+      <!-- Hero Visual Profile Card (강원대학교 회계학과 엠블럼 카드) -->
       <div class="relative group w-full max-w-sm">
-        <div class="glass-card rounded-3xl p-8 shadow-2xl border border-blue-500/20 relative overflow-hidden transition-all duration-500 group-hover:border-blue-500/50 group-hover:shadow-blue-500/10">
+        <div class="glass-card rounded-3xl p-8 shadow-2xl border border-blue-500/30 relative overflow-hidden transition-all duration-500 group-hover:border-blue-500/60 group-hover:shadow-blue-500/15">
           <!-- Top Decorative Badge -->
-          <div class="flex items-center justify-between mb-8">
+          <div class="flex items-center justify-between mb-6">
             <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/30">
-              <i class="fa-solid fa-scale-balanced"></i>
+              <i class="fa-solid fa-graduation-cap"></i>
             </div>
             <div class="text-right">
-              <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
-                2nd Year
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
+                2학년 재학 중
               </span>
             </div>
           </div>
 
           <!-- University & Major Info -->
-          <div class="space-y-2 mb-6">
-            <div class="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase">
+          <div class="space-y-1.5 mb-6">
+            <div class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 tracking-wider uppercase">
               Kangwon National University
             </div>
-            <h3 class="text-2xl font-extrabold text-gray-900 dark:text-white">
+            <h3 class="text-2xl font-black text-gray-900 dark:text-white">
               강원대학교
             </h3>
-            <p class="text-base font-semibold text-gray-700 dark:text-gray-300">
+            <p class="text-base font-bold text-gray-700 dark:text-gray-200">
               강릉캠퍼스 회계학과
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              Department of Accounting
             </p>
           </div>
 
+          <!-- Name Tag -->
+          <div class="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 mb-5 flex items-center justify-between">
+            <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">학부생</span>
+            <span class="text-base font-extrabold text-blue-600 dark:text-blue-400">이 영 준 (2학년)</span>
+          </div>
+
           <!-- Feature Tags -->
-          <div class="pt-4 border-t border-gray-200 dark:border-gray-800 flex flex-wrap gap-2">
+          <div class="pt-3 border-t border-gray-200 dark:border-gray-800 flex flex-wrap gap-2">
             <span class="text-xs px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">
-              📊 재무회계
+              📊 재무회계 (K-IFRS)
             </span>
             <span class="text-xs px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">
-              📈 원가관리회계
+              📈 원가관리 & BEP
             </span>
             <span class="text-xs px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium">
-              📑 데이터 분석
+              📑 Excel 재무모델링
             </span>
           </div>
         </div>
@@ -210,7 +227,7 @@
         <!-- Floating Decorative Badge -->
         <div class="absolute -bottom-3 -right-3 glass-card px-4 py-2 rounded-xl flex items-center gap-2 shadow-lg border-blue-500/30">
           <i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>
-          <span class="text-xs font-bold text-gray-800 dark:text-white">학부 재학생</span>
+          <span class="text-xs font-bold text-gray-800 dark:text-white">회계학 전공</span>
         </div>
       </div>
     </section>
@@ -219,7 +236,9 @@
     <section id="about" class="scroll-mt-24 space-y-12 reveal">
       <div class="text-center space-y-3">
         <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">About Me</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">숫자로 가치를 분석하고 인사이트를 찾습니다</h2>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
+          <span class="text-gradient">이영준</span>의 전공 가치관 & 핵심 역량
+        </h2>
       </div>
 
       <!-- Core Highlights Cards -->
@@ -237,44 +256,44 @@
     <section id="skills" class="scroll-mt-24 space-y-12 reveal">
       <div class="text-center space-y-3">
         <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">Competencies</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">전공 역량 & 실무 도구</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">체계적인 회계 전공 지식과 실무 데이터 활용 도구를 습득하고 있습니다.</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">회계 전공 역량 & 실무 도구</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">체계적인 회계학 이론 지식과 실무 엑셀 재무 분석 도구를 습득하고 있습니다.</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Accounting & Finance Column -->
+        <!-- Financial & Management Accounting Column -->
         <div class="glass-card p-6 rounded-2xl space-y-4">
           <div class="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-800">
             <div class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center">
-              <i class="fa-solid fa-calculator"></i>
+              <i class="fa-solid fa-coins"></i>
             </div>
-            <h3 class="font-bold text-gray-900 dark:text-white">회계 & 재무 전공</h3>
+            <h3 class="font-bold text-gray-900 dark:text-white">재무 & 관리회계</h3>
           </div>
-          <div id="skills-frontend" class="grid grid-cols-1 gap-2.5">
+          <div id="skills-financial" class="grid grid-cols-1 gap-2.5">
             <!-- Injected by main.js -->
           </div>
         </div>
 
-        <!-- Data & Office Tools Column -->
+        <!-- Tax & Business Column -->
         <div class="glass-card p-6 rounded-2xl space-y-4">
           <div class="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-800">
             <div class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center">
-              <i class="fa-solid fa-file-excel"></i>
+              <i class="fa-solid fa-receipt"></i>
             </div>
-            <h3 class="font-bold text-gray-900 dark:text-white">데이터 & 실무 툴</h3>
+            <h3 class="font-bold text-gray-900 dark:text-white">세무회계 & 경영 지식</h3>
           </div>
-          <div id="skills-backend" class="grid grid-cols-1 gap-2.5">
+          <div id="skills-tax" class="grid grid-cols-1 gap-2.5">
             <!-- Injected by main.js -->
           </div>
         </div>
 
-        <!-- IT & Collaboration Tools Column -->
+        <!-- Practical Tools Column -->
         <div class="glass-card p-6 rounded-2xl space-y-4">
           <div class="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-800">
             <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-              <i class="fa-solid fa-laptop-code"></i>
+              <i class="fa-solid fa-table"></i>
             </div>
-            <h3 class="font-bold text-gray-900 dark:text-white">IT & 협업 도구</h3>
+            <h3 class="font-bold text-gray-900 dark:text-white">실무 엑셀 & 자격 역량</h3>
           </div>
           <div id="skills-tools" class="grid grid-cols-1 gap-2.5">
             <!-- Injected by main.js -->
@@ -283,24 +302,27 @@
       </div>
     </section>
 
-    <!-- Projects & Academic Work Section -->
+    <!-- Academic Analysis & Projects Section -->
     <section id="projects" class="scroll-mt-24 space-y-10 reveal">
       <div class="text-center space-y-3">
-        <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">Academic & Projects</span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">학술 분석 & 프로젝트</h2>
-        <p class="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">전공 이론을 바탕으로 진행한 분석 보고서 및 실무 활용 템플릿입니다.</p>
+        <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">Academic Analysis</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">학술 분석 & 과제</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">전공 이론(K-IFRS, 원가관리, 세법)을 바탕으로 수행한 기업 재무제표 분석 및 실습 과제입니다.</p>
       </div>
 
       <!-- Filter Tabs -->
       <div class="flex flex-wrap items-center justify-center gap-2">
         <button data-filter="all" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md transition-all">
-          전체보기
+          전체보기 (All)
         </button>
-        <button data-filter="analysis" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
-          재무·원가 분석
+        <button data-filter="financial" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+          재무회계 & 분석
         </button>
-        <button data-filter="tools" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
-          데이터·관리 툴
+        <button data-filter="cost" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+          원가관리 & 손익(BEP)
+        </button>
+        <button data-filter="tax" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+          세무회계 & 세법
         </button>
       </div>
 
@@ -333,11 +355,11 @@
           </div>
           
           <h2 id="contact-title" class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
-            함께 소통하고 성장해 나가요!
+            함께 소통하고 성장하는 회계인이 되겠습니다
           </h2>
           
           <p id="contact-desc" class="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
-            강원대학교 회계학과 이영준입니다. 전공 스터디나 프로젝트 문의 등 편하게 연락주세요.
+            강원대학교 회계학과 2학년 이영준입니다. 전공 스터디나 프로젝트 문의 등 편하게 연락주세요.
           </p>
 
           <!-- Email Copy Card -->
@@ -362,11 +384,11 @@
   <footer class="border-t border-gray-200 dark:border-gray-800 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
     <div class="max-w-6xl mx-auto px-6 space-y-4">
       <div class="flex items-center justify-center gap-2 font-medium">
-        <span>Designed & Built with</span>
-        <span class="text-rose-500 animate-pulse">❤️</span>
-        <span>for Kangwon National Univ. Portfolio</span>
+        <span>강원대학교 경영대학 회계학과</span>
+        <span class="text-blue-500">·</span>
+        <span>이영준 (Lee Young-jun)</span>
       </div>
-      <p id="footer-copyright" class="text-xs font-mono">&copy; 2025 이영준 (Youngjun Lee). All rights reserved.</p>
+      <p id="footer-copyright" class="text-xs font-mono">&copy; 2025 이영준. Kangwon National University. All rights reserved.</p>
     </div>
   </footer>
 
