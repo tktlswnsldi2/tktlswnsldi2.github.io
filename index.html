@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Portfolio | 개인 포트폴리오</title>
+  <meta name="description" content="사용자 중심의 가치 있는 프로덕트를 만드는 개발자의 포트폴리오입니다." />
+  <meta name="author" content="tktlswnsldi2" />
+
+  <!-- Open Graph / SEO -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Developer Portfolio" />
+  <meta property="og:description" content="가치를 만드는 개발자의 포트폴리오 웹사이트" />
+  <meta property="og:url" content="https://tktlswnsldi2.github.io" />
+
+  <!-- Google Fonts & Pretendard -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="antialiased selection:bg-blue-500 selection:text-white">
+
+  <!-- Dynamic Background Orbs -->
+  <div class="bg-gradient-mesh">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="sticky top-0 z-40 w-full glass-nav transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      <!-- Logo / Name -->
+      <a href="#" class="flex items-center gap-2 group">
+        <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-mono font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
+          &lt;/&gt;
+        </span>
+        <span id="nav-name" class="font-bold text-xl tracking-tight text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          Portfolio
+        </span>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600 dark:text-gray-300">
+        <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+        <a href="#skills" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Skills</a>
+        <a href="#projects" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Projects</a>
+        <a href="#experience" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Experience</a>
+        <a href="#contact" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Buttons (Theme Toggle & Contact) -->
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle Button -->
+        <button type="button" class="theme-toggle p-2.5 rounded-xl glass-card text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none transition-colors" aria-label="Toggle theme">
+          <i class="fa-solid fa-sun text-lg theme-icon-sun hidden"></i>
+          <i class="fa-solid fa-moon text-lg theme-icon-moon"></i>
+        </button>
+
+        <!-- CTA Resume / GitHub Button -->
+        <a href="https://github.com/tktlswnsldi2" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all hover:shadow-lg hover:scale-105">
+          <i class="fa-brands fa-github text-base"></i>
+          <span>GitHub</span>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobile-menu-btn" type="button" class="md:hidden p-2.5 rounded-xl glass-card text-gray-600 dark:text-gray-300 focus:outline-none" aria-label="Open menu">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass-nav border-t border-gray-200 dark:border-gray-800 px-6 py-4 space-y-3">
+      <a href="#about" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">About</a>
+      <a href="#skills" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">Skills</a>
+      <a href="#projects" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">Projects</a>
+      <a href="#experience" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">Experience</a>
+      <a href="#contact" class="mobile-nav-link block py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600">Contact</a>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto px-6 space-y-32 py-16">
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-[75vh] flex flex-col-reverse lg:flex-row items-center justify-between gap-12 pt-8">
+      <div class="flex-1 space-y-6 text-center lg:text-left">
+        <!-- Availability Status Badge -->
+        <div id="status-badge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card border-emerald-500/30">
+          <!-- Populated by main.js -->
+        </div>
+
+        <!-- Greeting & Name -->
+        <div class="space-y-2">
+          <p id="hero-greeting" class="text-lg font-medium text-gray-600 dark:text-gray-400">
+            안녕하세요!
+          </p>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+            <span id="hero-name" class="text-gradient">개발자</span>입니다.
+          </h1>
+          <div class="h-10 text-xl sm:text-2xl font-mono font-semibold text-blue-600 dark:text-blue-400 flex items-center justify-center lg:justify-start">
+            <span id="typing-text" class="typing-cursor"></span>
+          </div>
+        </div>
+
+        <!-- Short Bio -->
+        <p id="hero-bio" class="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+          사용자 중심의 가치 있는 웹 서비스를 설계하고 구현합니다.
+        </p>
+
+        <!-- CTA Buttons & Social Icons -->
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+          <a href="#projects" class="w-full sm:w-auto px-7 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all text-center">
+            프로젝트 보기 <i class="fa-solid fa-arrow-down ml-2"></i>
+          </a>
+          <a id="btn-resume" href="#contact" class="w-full sm:w-auto px-7 py-3.5 glass-card text-gray-800 dark:text-white font-semibold rounded-xl hover:border-blue-500/50 transition-all text-center">
+            연락하기
+          </a>
+        </div>
+
+        <!-- Social Icons Row -->
+        <div id="hero-social-links" class="pt-4 flex items-center justify-center lg:justify-start gap-3">
+          <!-- Injected by main.js -->
+        </div>
+      </div>
+
+      <!-- Hero Avatar / Visual Card -->
+      <div class="relative group">
+        <div class="w-64 h-64 sm:w-80 sm:h-80 rounded-3xl p-1 bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 shadow-2xl transition-transform duration-500 group-hover:scale-105">
+          <div class="w-full h-full rounded-[22px] overflow-hidden bg-gray-900">
+            <img id="hero-avatar" src="" alt="Avatar" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+          </div>
+        </div>
+        <!-- Floating Tech Badge -->
+        <div class="absolute -bottom-4 -right-4 glass-card px-4 py-2.5 rounded-2xl flex items-center gap-2 shadow-xl border-blue-500/30 animate-bounce">
+          <i class="fa-solid fa-laptop-code text-blue-500 text-lg"></i>
+          <span class="text-xs font-bold text-gray-800 dark:text-white">Clean Code</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="scroll-mt-24 space-y-12 reveal">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">About Me</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">사용자 경험과 문제 해결에 집중합니다</h2>
+      </div>
+
+      <!-- Core Highlights Cards -->
+      <div id="about-highlights" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Injected by main.js -->
+      </div>
+
+      <!-- Stats Grid -->
+      <div id="about-stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+        <!-- Injected by main.js -->
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="scroll-mt-24 space-y-12 reveal">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">Tech Stack</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">기술 스택 & 도구</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">새로운 기술을 탐구하고 최적의 아키텍처를 위해 적절한 기술을 활용합니다.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Frontend Column -->
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <div class="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-800">
+            <div class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center">
+              <i class="fa-solid fa-code"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 dark:text-white">Frontend</h3>
+          </div>
+          <div id="skills-frontend" class="grid grid-cols-1 gap-2.5">
+            <!-- Injected by main.js -->
+          </div>
+        </div>
+
+        <!-- Backend Column -->
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <div class="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-800">
+            <div class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center">
+              <i class="fa-solid fa-server"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 dark:text-white">Backend & DB</h3>
+          </div>
+          <div id="skills-backend" class="grid grid-cols-1 gap-2.5">
+            <!-- Injected by main.js -->
+          </div>
+        </div>
+
+        <!-- Tools & DevOps Column -->
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+          <div class="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-800">
+            <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+              <i class="fa-solid fa-toolbox"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 dark:text-white">Tools & DevOps</h3>
+          </div>
+          <div id="skills-tools" class="grid grid-cols-1 gap-2.5">
+            <!-- Injected by main.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="scroll-mt-24 space-y-10 reveal">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">Portfolio</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">프로젝트 쇼케이스</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400 max-w-lg mx-auto">직접 고민하고 기획/개발한 프로젝트들을 소개합니다.</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <button data-filter="all" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white shadow-md transition-all">
+          전체보기
+        </button>
+        <button data-filter="web" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+          Web Apps
+        </button>
+        <button data-filter="fullstack" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+          Full Stack
+        </button>
+        <button data-filter="mobile" class="project-filter-btn px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+          Mobile
+        </button>
+      </div>
+
+      <!-- Project Cards Grid -->
+      <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Injected by main.js -->
+      </div>
+    </section>
+
+    <!-- Experience / Timeline Section -->
+    <section id="experience" class="scroll-mt-24 space-y-12 reveal">
+      <div class="text-center space-y-3">
+        <span class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">Journey</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">이력 및 활동</h2>
+      </div>
+
+      <div class="max-w-3xl mx-auto border-l-2 border-blue-500/30 ml-4 md:ml-auto">
+        <div id="timeline-container">
+          <!-- Injected by main.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="scroll-mt-24 reveal">
+      <div class="glass-card rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
+        <div class="max-w-2xl mx-auto space-y-6">
+          <div class="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-500 text-2xl flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-paper-plane"></i>
+          </div>
+          
+          <h2 id="contact-title" class="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">
+            함께 멋진 프로젝트를 만들어 볼까요?
+          </h2>
+          
+          <p id="contact-desc" class="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
+            새로운 기회와 협업 제안은 언제나 환영합니다.
+          </p>
+
+          <!-- Email Copy Card -->
+          <div class="p-4 rounded-2xl bg-gray-100/70 dark:bg-gray-800/70 border border-gray-200 dark:border-gray-700/60 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-md mx-auto">
+            <div class="flex items-center gap-3">
+              <i class="fa-solid fa-envelope text-blue-500 text-lg"></i>
+              <span id="contact-email-text" class="font-mono text-sm font-semibold text-gray-900 dark:text-white select-all"></span>
+            </div>
+            <button type="button" class="copy-email-btn w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow transition-all flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-copy"></i> 복사하기
+            </button>
+          </div>
+
+          <p id="contact-availability" class="text-xs text-gray-500 dark:text-gray-400 font-medium"></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 dark:border-gray-800 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
+    <div class="max-w-6xl mx-auto px-6 space-y-4">
+      <div class="flex items-center justify-center gap-2 font-medium">
+        <span>Designed & Built with</span>
+        <span class="text-rose-500 animate-pulse">❤️</span>
+        <span>for GitHub Pages</span>
+      </div>
+      <p id="footer-copyright" class="text-xs font-mono">&copy; 2025. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Project Detail Modal -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div id="modal-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+    <div class="relative w-full max-w-2xl glass-modal rounded-2xl p-6 sm:p-8 shadow-2xl z-10 my-8 max-h-[90vh] overflow-y-auto">
+      <button id="close-modal-btn" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-colors" aria-label="Close modal">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+      <div id="modal-content">
+        <!-- Injected by window.openProjectModal -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-8 left-1/2 z-50 glass-modal px-5 py-3 rounded-xl shadow-2xl border border-blue-500/40 flex items-center gap-3">
+    <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
+    <span id="toast-msg" class="text-sm font-medium text-gray-900 dark:text-white"></span>
+  </div>
+
+  <!-- Back to top Floating Button -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 z-40 p-3.5 rounded-2xl bg-blue-600 text-white shadow-xl hover:bg-blue-700 hover:scale-110 transition-all duration-300 opacity-0 pointer-events-none" aria-label="Scroll to top">
+    <i class="fa-solid fa-arrow-up text-base"></i>
+  </button>
+
+  <!-- Scripts -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
