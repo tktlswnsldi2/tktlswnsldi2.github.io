@@ -150,17 +150,29 @@ function renderStats() {
 
 function renderSkills() {
   const { skills } = portfolioData;
-  const renderList = (items) => items.map(skill => `
-    <div class="group relative flex items-center gap-3 p-3.5 rounded-xl glass-card transition-all duration-300 hover:border-blue-500/40">
-      <img src="${skill.icon}" alt="${skill.name}" class="w-7 h-7 object-contain group-hover:scale-110 transition-transform duration-300" 
-           onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
-      <i class="fa-solid fa-code text-xl text-blue-500 hidden"></i>
-      <div class="flex-1 min-w-0">
-        <div class="text-sm font-semibold text-gray-900 dark:text-white truncate">${skill.name}</div>
-        <div class="text-xs text-blue-600/80 dark:text-blue-400/80">${skill.level}</div>
+  const renderList = (items) => items.map(skill => {
+    const isFontAwesome = skill.icon && skill.icon.startsWith('fa-');
+    const isImgUrl = skill.icon && (skill.icon.startsWith('http') || skill.icon.startsWith('/'));
+
+    let iconHtml = '<i class="fa-solid fa-check-circle text-blue-500 text-lg"></i>';
+    if (isFontAwesome) {
+      iconHtml = `<i class="${skill.icon} text-lg text-blue-500"></i>`;
+    } else if (isImgUrl) {
+      iconHtml = `<img src="${skill.icon}" alt="${skill.name}" class="w-6 h-6 object-contain group-hover:scale-110 transition-transform duration-300" onerror="this.outerHTML='<i class=\\'fa-solid fa-check-circle text-blue-500 text-lg\\'></i>';" />`;
+    }
+
+    return `
+      <div class="group relative flex items-center gap-3 p-3.5 rounded-xl glass-card transition-all duration-300 hover:border-blue-500/40">
+        <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+          ${iconHtml}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-gray-900 dark:text-white truncate">${skill.name}</div>
+          <div class="text-xs text-blue-600/80 dark:text-blue-400/80">${skill.level}</div>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   const feContainer = document.getElementById('skills-frontend');
   if (feContainer && skills.frontend) feContainer.innerHTML = renderList(skills.frontend);
