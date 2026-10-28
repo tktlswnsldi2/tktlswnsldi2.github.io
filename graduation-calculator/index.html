@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>25학번 회계학과 졸업자가진단 포털 | 이영준</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif; }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen p-3 sm:p-6 md:p-8">
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- 상단 인트라넷 스타일 헤더 바 -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">25학번</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700">사회과학대학 · 회계학과</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">졸업기준 130학점</span>
+        </div>
+        <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+          🏛️ 학사종합정보 졸업자가진단 시스템
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+          주전공(회계학)과 2개 부전공(핀테크·공공인재)의 전필/전선을 각각 분리하여 관리합니다.
+        </p>
+      </div>
+
+      <!-- 우측 상단: 트랙 전환 및 백업 버튼 -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <a href="../" class="px-3 py-2 rounded-xl text-xs font-bold border border-slate-300 hover:bg-slate-100 text-slate-700 transition-colors flex items-center justify-center gap-1">
+          <span>🏠 포트폴리오 메인</span>
+        </a>
+        <div class="bg-slate-100 p-1 rounded-xl flex border border-slate-200 text-xs font-bold">
+          <button id="btnTrackV1" type="button" class="px-3 py-2 rounded-lg transition-all text-slate-600 hover:text-slate-900" onclick="setTrack('v1')">
+            버전 1: 전공심화
+          </button>
+          <button id="btnTrackV2" type="button" class="px-3 py-2 rounded-lg transition-all bg-white text-indigo-700 shadow-sm" onclick="setTrack('v2')">
+            버전 2: 더블 부전공
+          </button>
+        </div>
+        <button type="button" onclick="openBackupModal()" class="px-3 py-2 rounded-xl text-xs font-bold border border-slate-300 hover:bg-slate-100 text-slate-700 transition-colors flex items-center justify-center gap-1">
+          <span>💾 데이터 백업/복원</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 현재 트랙 안내 배너 -->
+    <div id="trackBanner" class="rounded-xl p-4 border text-xs sm:text-sm leading-relaxed transition-all"></div>
+
+    <!-- 인트라넷 총괄 진단 요약 카드 그리드 -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs font-medium text-slate-500">실제 취득 학점 (F/NP 제외)</span>
+        <div class="mt-2 flex items-baseline gap-1">
+          <span class="text-2xl sm:text-3xl font-black text-slate-900" id="statTotalEarned">0</span>
+          <span class="text-sm font-semibold text-slate-400">/ 130 학점</span>
+        </div>
+        <div class="mt-3 w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+          <div id="statTotalBar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs font-medium text-slate-500">졸업 잔여 필요 학점</span>
+        <div class="mt-2 flex items-baseline gap-1">
+          <span class="text-2xl sm:text-3xl font-black text-amber-600" id="statRemaining">130</span>
+          <span class="text-sm font-semibold text-slate-400">학점 부족</span>
+        </div>
+        <span class="text-[11px] text-slate-400 mt-2 block" id="statSemesterEst">약 8학기 분량</span>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs font-medium text-slate-500">영역 요건 충족 현황</span>
+        <div class="mt-2 flex items-baseline gap-1">
+          <span class="text-2xl sm:text-3xl font-black text-emerald-600" id="statCompletedCount">0</span>
+          <span class="text-sm font-semibold text-slate-400" id="statTotalCount">/ 7 영역 완료</span>
+        </div>
+        <span class="text-[11px] text-slate-400 mt-2 block" id="statPassBadge">판정: 이수중</span>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <span class="text-xs font-medium text-slate-500">이수 과목 수 / 평점(GPA)</span>
+        <div class="mt-2 flex items-baseline gap-1">
+          <span class="text-2xl sm:text-3xl font-black text-indigo-600" id="statCourseCount">0</span>
+          <span class="text-sm font-semibold text-slate-400">과목</span>
+          <span class="ml-auto text-xs font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded" id="statAvgGpa">평점 -</span>
+        </div>
+        <span class="text-[11px] text-slate-400 mt-2 block">F는 0점 산입 / P·NP 평점 제외</span>
+      </div>
+    </div>
+
+    <!-- 1. 인트라넷 졸업사정표 종합 상태 테이블 -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+            <span>📋</span> 영역별 졸업사정 판정표
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">과목을 등록할 때마다 해당 전공 영역의 취득 학점과 상태가 자동 갱신됩니다.</p>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase text-[11px]">
+            <tr>
+              <th class="py-3 px-4">이수 구분</th>
+              <th class="py-3 px-3 text-center">기준 학점</th>
+              <th class="py-3 px-3 text-center">현재 취득</th>
+              <th class="py-3 px-4 min-w-[140px]">진행도</th>
+              <th class="py-3 px-3 text-center">잔여 학점</th>
+              <th class="py-3 px-3 text-center">판정</th>
+            </tr>
+          </thead>
+          <tbody id="summaryTableBody" class="divide-y divide-slate-100 font-medium">
+            <!-- 렌더링 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. 전공별 전필/필수과목 체크리스트 (회계학, 핀테크, 공공인재 3분할 분리) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <span>🎯</span> 전공별 필수과목 (전필/전기) 이수 체크리스트
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">
+            주전공(회계학)과 두 부전공(핀테크, 공공인재)의 필수 과목을 각각 따로 관리합니다.
+          </p>
+        </div>
+
+        <!-- 새 필수과목 추가 폼 -->
+        <form onsubmit="event.preventDefault(); addRequiredCourse();" class="flex items-center gap-1.5 flex-wrap">
+          <select id="newReqMajorSelect" class="text-xs border border-slate-300 rounded-lg px-2 py-1.5 focus:outline-none bg-slate-50 font-bold">
+            <option value="회계학">회계학 (주전공)</option>
+            <option value="핀테크">핀테크 (부전공)</option>
+            <option value="공공인재">공공인재 (부전공)</option>
+          </select>
+          <input type="text" id="newReqCourseInput" placeholder="필수과목명 (예: 회계원리)" class="text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-500 w-36">
+          <button type="submit" class="text-xs font-bold bg-slate-800 text-white px-3 py-1.5 rounded-lg hover:bg-slate-700">추가</button>
+        </form>
+      </div>
+
+      <!-- 3개 전공별 분리 카드 그리드 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 1) 회계학 필수과목 -->
+        <div class="border border-blue-200 bg-blue-50/30 rounded-xl p-3.5 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-blue-100 pb-2">
+            <span class="font-extrabold text-xs text-blue-900 flex items-center gap-1.5">
+              <span>🏛️</span> 회계학 (주전공 전필/전기)
+            </span>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800" id="badgeReqAccounting">0/0 완료</span>
+          </div>
+          <div id="listReqAccounting" class="space-y-1.5 min-h-[60px]"></div>
+        </div>
+
+        <!-- 2) 핀테크 필수과목 -->
+        <div class="border border-indigo-200 bg-indigo-50/30 rounded-xl p-3.5 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-indigo-100 pb-2">
+            <span class="font-extrabold text-xs text-indigo-900 flex items-center gap-1.5">
+              <span>💳</span> 핀테크 (부전공 전필)
+            </span>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800" id="badgeReqFintech">0/0 완료</span>
+          </div>
+          <div id="listReqFintech" class="space-y-1.5 min-h-[60px]"></div>
+        </div>
+
+        <!-- 3) 공공인재 필수과목 -->
+        <div class="border border-purple-200 bg-purple-50/30 rounded-xl p-3.5 space-y-2.5">
+          <div class="flex items-center justify-between border-b border-purple-100 pb-2">
+            <span class="font-extrabold text-xs text-purple-900 flex items-center gap-1.5">
+              <span>⚖️</span> 공공인재 (부전공 전필)
+            </span>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800" id="badgeReqPublic">0/0 완료</span>
+          </div>
+          <div id="listReqPublic" class="space-y-1.5 min-h-[60px]"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 과목 등록 및 이수 과목 목록 관리 (인트라넷 과목 리스트) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="p-4 sm:p-5 border-b border-slate-200 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+              <span>✍️</span> 과목 직접 기입 & 이수 내역 관리
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">회계학 전필, 핀테크 전필, 공공인재 전필 등 구분을 명확히 선택하여 등록할 수 있습니다.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="loadSampleData()" class="text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 font-semibold px-3 py-1.5 rounded-lg transition-colors">
+              + 예시 과목 불러오기
+            </button>
+            <button type="button" onclick="clearAllCourses()" class="text-xs text-rose-600 hover:bg-rose-50 font-semibold px-2.5 py-1.5 rounded-lg transition-colors">
+              전체 비우기
+            </button>
+          </div>
+        </div>
+
+        <!-- 과목 등록 알림 토스트 -->
+        <div id="toastAlert" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-between">
+          <span id="toastMessage">과목이 등록되었습니다!</span>
+          <button type="button" onclick="document.getElementById('toastAlert').classList.add('hidden')" class="text-emerald-600 font-bold ml-2">✕</button>
+        </div>
+
+        <!-- 과목 추가 입력 FORM -->
+        <form id="courseForm" onsubmit="event.preventDefault(); addCourse();" class="bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2.5 items-end text-xs">
+          <div class="md:col-span-2">
+            <label class="block font-bold text-slate-600 mb-1">과목명 <span class="text-rose-500">*</span></label>
+            <input type="text" id="inputCourseName" placeholder="과목명 입력 (예: 회계원리)" required class="w-full bg-white border border-slate-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">이수 구분 (전공별 분리)</label>
+            <select id="inputCourseCategory" class="w-full bg-white border border-slate-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold" onchange="toggleFintechOverlapCheckbox()">
+              <!-- 회계학 주전공 -->
+              <optgroup label="🏛️ 회계학 (주전공)">
+                <option value="회계학-전공기초">회계학: 전공기초</option>
+                <option value="회계학-전공필수" selected>회계학: 전공필수 (전필)</option>
+                <option value="회계학-전공선택">회계학: 전공선택 (전선)</option>
+                <option value="회계학-전공심화" id="optMajorDeep">회계학: 전공심화</option>
+              </optgroup>
+              <!-- 핀테크 부전공 -->
+              <optgroup label="💳 핀테크 (부전공 1)" id="groupFintech">
+                <option value="핀테크-전공필수">핀테크: 전공필수 (전필)</option>
+                <option value="핀테크-전공선택">핀테크: 전공선택 (전선)</option>
+              </optgroup>
+              <!-- 공공인재 부전공 -->
+              <optgroup label="⚖️ 공공인재 (부전공 2)" id="groupPublic">
+                <option value="공공인재-전공필수">공공인재: 전공필수 (전필)</option>
+                <option value="공공인재-전공선택">공공인재: 전공선택 (전선)</option>
+              </optgroup>
+              <!-- 교양 및 기타 -->
+              <optgroup label="📚 공통 및 기타">
+                <option value="교양">교양 (통합)</option>
+                <option value="일반선택">일반선택</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">학점</label>
+            <select id="inputCourseCredits" class="w-full bg-white border border-slate-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+              <option value="3" selected>3 학점</option>
+              <option value="2">2 학점</option>
+              <option value="1">1 학점</option>
+              <option value="4">4 학점</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">성적 (선택)</label>
+            <select id="inputCourseGrade" class="w-full bg-white border border-slate-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+              <option value="A+">A+ (4.5)</option>
+              <option value="A0">A0 (4.0)</option>
+              <option value="B+">B+ (3.5)</option>
+              <option value="B0">B0 (3.0)</option>
+              <option value="C+">C+ (2.5)</option>
+              <option value="C0">C0 (2.0)</option>
+              <option value="D+">D+ (1.5)</option>
+              <option value="D0">D0 (1.0)</option>
+              <option value="F">F (0.0 / 과락·미취득)</option>
+              <option value="P">P (Pass / 이수)</option>
+              <option value="NP">NP (Non-Pass / 미이수)</option>
+              <option value="수강중">수강중 (예정)</option>
+            </select>
+          </div>
+
+          <div>
+            <button type="submit" id="btnSubmitCourse" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-1 shadow-sm">
+              <span>+ 과목 등록</span>
+            </button>
+          </div>
+
+          <!-- 핀테크 중복 인정 체크박스 (회계학 과목 등록 시 활성화) -->
+          <div id="fintechOverlapContainer" class="sm:col-span-2 md:col-span-6 flex items-center gap-2 pt-1">
+            <input type="checkbox" id="checkFintechOverlap" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer">
+            <label for="checkFintechOverlap" class="text-indigo-900 font-semibold cursor-pointer">
+              ★ 핀테크 부전공 중복 인정 과목으로 지정 (회계학 전공으로 들으면서 최대 9학점까지 핀테크 부전공 학점에 동시 반영)
+            </label>
+          </div>
+        </form>
+
+        <!-- 보기 필터 탭 -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-semibold" id="filterTabs">
+          <button type="button" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-white" onclick="setFilter('ALL', this)">전체 보기 (<span id="cntAll">0</span>)</button>
+          <button type="button" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200" onclick="setFilter('회계학', this)">🏛️ 회계학</button>
+          <button type="button" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200" id="filterFintech" onclick="setFilter('핀테크', this)">💳 핀테크</button>
+          <button type="button" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200" id="filterPublic" onclick="setFilter('공공인재', this)">⚖️ 공공인재</button>
+          <button type="button" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200" onclick="setFilter('교양', this)">교양</button>
+          <button type="button" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200" onclick="setFilter('일반선택', this)">일반선택</button>
+        </div>
+      </div>
+
+      <!-- 이수 과목 테이블 -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 uppercase text-[11px]">
+            <tr>
+              <th class="py-3 px-4">과목명</th>
+              <th class="py-3 px-3">소속 전공 / 이수 구분</th>
+              <th class="py-3 px-3 text-center">학점</th>
+              <th class="py-3 px-3 text-center">성적</th>
+              <th class="py-3 px-4">특이사항/중복인정</th>
+              <th class="py-3 px-3 text-center w-16">관리</th>
+            </tr>
+          </thead>
+          <tbody id="courseTableBody" class="divide-y divide-slate-100">
+            <!-- 렌더링 -->
+          </tbody>
+        </table>
+      </div>
+      <div id="emptyNotice" class="p-8 text-center text-xs sm:text-sm text-slate-400 font-medium">
+        등록된 이수 과목이 없습니다. 위 입력창에서 과목을 입력하고 [Enter] 또는 [+ 과목 등록] 버튼을 눌러보세요!
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 데이터 백업/복원 모달 -->
+  <div id="backupModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-xl">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-bold text-base text-slate-900">💾 데이터 백업 및 복원</h3>
+        <button type="button" onclick="closeBackupModal()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        입력하신 과목 데이터가 아래 텍스트 상자에 담겨 있습니다. 복사해 메모장에 저장해 두시면 언제든 다시 붙여넣어 복원할 수 있습니다.
+      </p>
+      <textarea id="backupTextarea" rows="6" class="w-full text-xs font-mono p-3 border rounded-xl bg-slate-50 focus:outline-none"></textarea>
+      <div class="flex items-center justify-between gap-2 pt-2">
+        <button type="button" onclick="copyBackupToClipboard()" class="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+          📋 클립보드에 복사
+        </button>
+        <button type="button" onclick="restoreFromBackupText()" class="text-xs font-bold bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg">
+          📥 텍스트로부터 복원하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SafeStorage = {
+      get: function(key, fallback) {
+        try {
+          const val = localStorage.getItem(key);
+          if (val === null || val === undefined) return fallback;
+          return JSON.parse(val);
+        } catch (e) {
+          console.warn("Storage read error, using memory fallback", e);
+          return fallback;
+        }
+      },
+      set: function(key, val) {
+        try {
+          localStorage.setItem(key, JSON.stringify(val));
+        } catch (e) {
+          console.warn("Storage write error", e);
+        }
+      }
+    };
+
+    const GRADE_POINTS = {
+      'A+': 4.5, 'A0': 4.0,
+      'B+': 3.5, 'B0': 3.0,
+      'C+': 2.5, 'C0': 2.0,
+      'D+': 1.5, 'D0': 1.0,
+      'F': 0.0
+    };
+
+    // 기본 필수과목 (회계학, 핀테크, 공공인재 각각 분리)
+    const DEFAULT_REQUIRED_COURSES = [
+      // 회계학 (주전공)
+      { id: 1, major: "회계학", name: "회계원리", checked: false },
+      { id: 2, major: "회계학", name: "경제학원론", checked: false },
+      { id: 3, major: "회계학", name: "경영학원론", checked: false },
+      { id: 4, major: "회계학", name: "중급재무회계1", checked: false },
+      { id: 5, major: "회계학", name: "원가회계", checked: false },
+      { id: 6, major: "회계학", name: "세무회계", checked: false },
+      // 핀테크 (부전공)
+      { id: 101, major: "핀테크", name: "핀테크개론", checked: false },
+      { id: 102, major: "핀테크", name: "금융데이터분석", checked: false },
+      // 공공인재 (부전공)
+      { id: 201, major: "공공인재", name: "행정학개론", checked: false },
+      { id: 202, major: "공공인재", name: "정책학", checked: false }
+    ];
+
+    let currentTrack = SafeStorage.get('user_track', 'v2');
+    let courses = SafeStorage.get('user_courses', []);
+    let requiredList = SafeStorage.get('user_req_courses', DEFAULT_REQUIRED_COURSES);
+    let currentFilter = 'ALL';
+
+    // 기존 데이터 호환성 보정 (예전 카테고리명을 새 분류명으로 변환)
+    courses = courses.map(c => {
+      if (c.category === '전공기초') return { ...c, category: '회계학-전공기초' };
+      if (c.category === '전공필수') return { ...c, category: '회계학-전공필수' };
+      if (c.category === '전공선택') return { ...c, category: '회계학-전공선택' };
+      if (c.category === '전공심화') return { ...c, category: '회계학-전공심화' };
+      if (c.category === '핀테크부전공') return { ...c, category: '핀테크-전공필수' };
+      if (c.category === '공공인재부전공') return { ...c, category: '공공인재-전공필수' };
+      return c;
+    });
+
+    requiredList = requiredList.map(r => {
+      if (!r.major) {
+        if (r.category === '전공필수' || r.category === '전공기초') return { ...r, major: '회계학' };
+        return { ...r, major: '회계학' };
+      }
+      return r;
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastAlert');
+      const msgEl = document.getElementById('toastMessage');
+      if (toast && msgEl) {
+        msgEl.textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => { toast.classList.add('hidden'); }, 3500);
+      }
+    }
+
+    function saveAndRender() {
+      SafeStorage.set('user_track', currentTrack);
+      SafeStorage.set('user_courses', courses);
+      SafeStorage.set('user_req_courses', requiredList);
+      render();
+    }
+
+    window.setTrack = function(track) {
+      currentTrack = track;
+      saveAndRender();
+    };
+
+    window.setFilter = function(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.className = "filter-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200";
+      });
+      if (btn) {
+        btn.className = "filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-white";
+      }
+      renderCourseTable();
+    };
+
+    window.toggleFintechOverlapCheckbox = function() {
+      const cat = document.getElementById('inputCourseCategory').value;
+      const container = document.getElementById('fintechOverlapContainer');
+      // 회계학 과목일 때 핀테크 중복 체크박스 노출
+      if (currentTrack === 'v2' && cat.startsWith('회계학-')) {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
+        const chk = document.getElementById('checkFintechOverlap');
+        if (chk) chk.checked = false;
+      }
+    };
+
+    window.addCourse = function() {
+      const nameInput = document.getElementById('inputCourseName');
+      const name = nameInput.value.trim();
+      if (!name) {
+        alert("과목명을 입력해 주세요.");
+        nameInput.focus();
+        return;
+      }
+
+      const category = document.getElementById('inputCourseCategory').value;
+      const credits = Number(document.getElementById('inputCourseCredits').value) || 3;
+      const grade = document.getElementById('inputCourseGrade').value;
+      const isFintechOverlap = document.getElementById('checkFintechOverlap').checked && category.startsWith('회계학-');
+
+      const newCourse = {
+        id: Date.now(),
+        name: name,
+        category: category,
+        credits: credits,
+        grade: grade,
+        isFintechOverlap: isFintechOverlap
+      };
+
+      courses.unshift(newCourse);
+
+      // 필수과목 체크 연동 (F, NP가 아닐 때만 이수완료 인정)
+      if (grade !== 'F' && grade !== 'NP') {
+        requiredList = requiredList.map(item => {
+          if (item.name.replace(/\s+/g, '') === name.replace(/\s+/g, '')) {
+            return { ...item, checked: true };
+          }
+          return item;
+        });
+      }
+
+      nameInput.value = '';
+      const chk = document.getElementById('checkFintechOverlap');
+      if (chk) chk.checked = false;
+
+      const failMsg = (grade === 'F' || grade === 'NP') ? ' (⚠️ 과락으로 학점 미취득)' : '';
+      showToast(`✅ '${name}' (${category}, ${credits}학점, 성적 ${grade}) 등록 완료!${failMsg}`);
+      saveAndRender();
+      nameInput.focus();
+    };
+
+    window.deleteCourse = function(id) {
+      courses = courses.filter(c => c.id !== id);
+      saveAndRender();
+    };
+
+    window.clearAllCourses = function() {
+      if (confirm("등록된 모든 과목을 비우시겠습니까?")) {
+        courses = [];
+        requiredList.forEach(r => r.checked = false);
+        saveAndRender();
+      }
+    };
+
+    window.addRequiredCourse = function() {
+      const input = document.getElementById('newReqCourseInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const major = document.getElementById('newReqMajorSelect').value;
+      requiredList.push({ id: Date.now(), major: major, name: val, checked: false });
+      input.value = '';
+      saveAndRender();
+    };
+
+    window.toggleReqItem = function(id) {
+      requiredList = requiredList.map(r => r.id === id ? { ...r, checked: !r.checked } : r);
+      saveAndRender();
+    };
+
+    window.deleteReqItem = function(id) {
+      requiredList = requiredList.filter(r => r.id !== id);
+      saveAndRender();
+    };
+
+    window.loadSampleData = function() {
+      courses = [
+        { id: 1, name: "회계원리", category: "회계학-전공기초", credits: 3, grade: "A+", isFintechOverlap: true },
+        { id: 2, name: "경제학원론", category: "회계학-전공기초", credits: 3, grade: "A0", isFintechOverlap: false },
+        { id: 3, name: "경영학원론", category: "회계학-전공기초", credits: 3, grade: "B+", isFintechOverlap: false },
+        { id: 4, name: "중급재무회계1", category: "회계학-전공필수", credits: 3, grade: "A+", isFintechOverlap: true },
+        { id: 5, name: "원가회계", category: "회계학-전공필수", credits: 3, grade: "A0", isFintechOverlap: true },
+        { id: 6, name: "대학글쓰기", category: "교양", credits: 3, grade: "A0", isFintechOverlap: false },
+        { id: 7, name: "실용영어", category: "교양", credits: 3, grade: "P", isFintechOverlap: false },
+        { id: 8, name: "파이썬프로그래밍", category: "교양", credits: 3, grade: "B0", isFintechOverlap: false },
+        { id: 9, name: "핀테크개론", category: "핀테크-전공필수", credits: 3, grade: "A0", isFintechOverlap: false },
+        { id: 10, name: "행정학개론", category: "공공인재-전공필수", credits: 3, grade: "B+", isFintechOverlap: false }
+      ];
+      requiredList.forEach(r => {
+        if (["회계원리", "경제학원론", "경영학원론", "중급재무회계1", "원가회계", "핀테크개론", "행정학개론"].includes(r.name)) {
+          r.checked = true;
+        }
+      });
+      showToast("✅ 전필이 전공별로 구분된 예시 과목 10개가 불러와졌습니다.");
+      saveAndRender();
+    };
+
+    // 모달 관리 함수
+    window.openBackupModal = function() {
+      const data = {
+        currentTrack: currentTrack,
+        courses: courses,
+        requiredList: requiredList
+      };
+      document.getElementById('backupTextarea').value = JSON.stringify(data, null, 2);
+      document.getElementById('backupModal').classList.remove('hidden');
+    };
+
+    window.closeBackupModal = function() {
+      document.getElementById('backupModal').classList.add('hidden');
+    };
+
+    window.copyBackupToClipboard = function() {
+      const ta = document.getElementById('backupTextarea');
+      ta.select();
+      navigator.clipboard.writeText(ta.value).then(() => {
+        alert("백업 텍스트가 클립보드에 복사되었습니다! 메모장에 붙여넣어 보관하세요.");
+      });
+    };
+
+    window.restoreFromBackupText = function() {
+      try {
+        const text = document.getElementById('backupTextarea').value.trim();
+        const parsed = JSON.parse(text);
+        if (parsed.courses) courses = parsed.courses;
+        if (parsed.requiredList) requiredList = parsed.requiredList;
+        if (parsed.currentTrack) currentTrack = parsed.currentTrack;
+        saveAndRender();
+        closeBackupModal();
+        alert("성공적으로 복원되었습니다!");
+      } catch (e) {
+        alert("올바른 JSON 데이터 형식이 아닙니다.");
+      }
+    };
+
+    function render() {
+      const btnV1 = document.getElementById('btnTrackV1');
+      const btnV2 = document.getElementById('btnTrackV2');
+      const banner = document.getElementById('trackBanner');
+
+      if (currentTrack === 'v1') {
+        btnV1.className = "px-3 py-2 rounded-lg transition-all bg-white text-blue-700 shadow-sm font-bold";
+        btnV2.className = "px-3 py-2 rounded-lg transition-all text-slate-600 hover:text-slate-900";
+        banner.className = "rounded-xl p-4 border border-blue-200 bg-blue-50/70 text-blue-950 text-xs sm:text-sm";
+        banner.innerHTML = `<strong>📌 버전 1 (전공심화 트랙)</strong>: 회계학 전공 69학점(전기 15 + 전필 21 + 전선 3 + 심화 30) + 교양 40학점 + 일반선택 21학점으로 총 130학점을 완성합니다.`;
+        document.getElementById('optMajorDeep').classList.remove('hidden');
+        document.getElementById('groupFintech').classList.add('hidden');
+        document.getElementById('groupPublic').classList.add('hidden');
+        document.getElementById('filterFintech').classList.add('hidden');
+        document.getElementById('filterPublic').classList.add('hidden');
+      } else {
+        btnV2.className = "px-3 py-2 rounded-lg transition-all bg-white text-indigo-700 shadow-sm font-bold";
+        btnV1.className = "px-3 py-2 rounded-lg transition-all text-slate-600 hover:text-slate-900";
+        banner.className = "rounded-xl p-4 border border-indigo-200 bg-indigo-50/70 text-indigo-950 text-xs sm:text-sm";
+        banner.innerHTML = `<strong>📌 버전 2 (더블 부전공 트랙)</strong>: 회계학 기본 39학점 + 핀테크 부전공(21학점 중 <strong>9학점 회계학과 중복인정</strong> 적용 ➜ 순수 12학점) + 공공인재 부전공 21학점 + 교양 40학점 + 일반선택 18학점으로 총 130학점을 이수합니다.`;
+        document.getElementById('optMajorDeep').classList.add('hidden');
+        document.getElementById('groupFintech').classList.remove('hidden');
+        document.getElementById('groupPublic').classList.remove('hidden');
+        document.getElementById('filterFintech').classList.remove('hidden');
+        document.getElementById('filterPublic').classList.remove('hidden');
+      }
+      toggleFintechOverlapCheckbox();
+
+      // 세부 이수학점 맵
+      let earnedMap = {
+        '회계학-전공기초': 0, '회계학-전공필수': 0, '회계학-전공선택': 0, '회계학-전공심화': 0,
+        '핀테크-전공필수': 0, '핀테크-전공선택': 0,
+        '공공인재-전공필수': 0, '공공인재-전공선택': 0,
+        '교양': 0, '일반선택': 0
+      };
+      let fintechOverlapEarned = 0;
+      let totalEarnedActual = 0;
+      let gradeSum = 0;
+      let gradeCredits = 0;
+
+      courses.forEach(c => {
+        const cr = Number(c.credits) || 0;
+        const isFailed = (c.grade === 'F' || c.grade === 'NP');
+        const earnedCr = isFailed ? 0 : cr;
+
+        totalEarnedActual += earnedCr;
+
+        if (earnedMap[c.category] !== undefined) {
+          earnedMap[c.category] += earnedCr;
+        } else {
+          earnedMap['일반선택'] += earnedCr;
+        }
+
+        if (c.isFintechOverlap && !isFailed) {
+          fintechOverlapEarned += earnedCr;
+        }
+
+        if (GRADE_POINTS[c.grade] !== undefined) {
+          gradeSum += GRADE_POINTS[c.grade] * cr;
+          gradeCredits += cr;
+        }
+      });
+
+      const fintechOverlapCapped = Math.min(9, fintechOverlapEarned);
+
+      // 졸업 요건 타겟 구성
+      let targets = [];
+      if (currentTrack === 'v1') {
+        targets = [
+          { name: "회계학: 전공기초", req: 15, earned: earnedMap['회계학-전공기초'], desc: "주전공 기초필수" },
+          { name: "회계학: 전공필수", req: 21, earned: earnedMap['회계학-전공필수'], desc: "주전공 전필" },
+          { name: "회계학: 전공선택", req: 3, earned: earnedMap['회계학-전공선택'], desc: "주전공 전선" },
+          { name: "회계학: 전공심화", req: 30, earned: earnedMap['회계학-전공심화'], desc: "주전공 심화" },
+          { name: "교양 (통합)", req: 40, earned: earnedMap['교양'], desc: "이수구분 없음" },
+          { name: "일반선택", req: 21, earned: earnedMap['일반선택'], desc: "자유 수강 잔여학점" }
+        ];
+      } else {
+        // 버전 2: 핀테크 (전필 + 전선 + 중복인정 합산 = 21)
+        const fintechPure = earnedMap['핀테크-전공필수'] + earnedMap['핀테크-전공선택'];
+        const fintechTotal = fintechPure + fintechOverlapCapped;
+
+        // 공공인재 (전필 + 전선 합산 = 21)
+        const publicTotal = earnedMap['공공인재-전공필수'] + earnedMap['공공인재-전공선택'];
+
+        targets = [
+          { name: "회계학: 전공기초", req: 15, earned: earnedMap['회계학-전공기초'], desc: "주전공 기초" },
+          { name: "회계학: 전공필수", req: 21, earned: earnedMap['회계학-전공필수'], desc: "주전공 전필" },
+          { name: "회계학: 전공선택", req: 3, earned: earnedMap['회계학-전공선택'], desc: "주전공 전선 (심화면제)" },
+          { 
+            name: "핀테크 부전공 (전필+전선)", 
+            req: 21, 
+            earned: fintechTotal, 
+            desc: `기준 21학점 (회계학 중복 ${fintechOverlapCapped}/9학점 + 순수 전필·전선 ${fintechPure}학점)` 
+          },
+          { 
+            name: "공공인재 부전공 (전필+전선)", 
+            req: 21, 
+            earned: publicTotal, 
+            desc: `기준 21학점 (전필 ${earnedMap['공공인재-전공필수']}학점 + 전선 ${earnedMap['공공인재-전공선택']}학점)` 
+          },
+          { name: "교양 (통합)", req: 40, earned: earnedMap['교양'], desc: "이수구분 없음" },
+          { name: "일반선택", req: 18, earned: earnedMap['일반선택'], desc: "자유 수강 잔여학점" }
+        ];
+      }
+
+      const sumTbody = document.getElementById('summaryTableBody');
+      sumTbody.innerHTML = '';
+      let completedAreas = 0;
+
+      targets.forEach(t => {
+        const diff = t.req - t.earned;
+        const remain = diff > 0 ? diff : 0;
+        const isPass = remain === 0;
+        if (isPass) completedAreas++;
+
+        const pct = Math.min(100, Math.round((t.earned / t.req) * 100));
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition-colors";
+        tr.innerHTML = `
+          <td class="py-3 px-4">
+            <div class="font-bold text-slate-800">${t.name}</div>
+            <div class="text-[11px] text-slate-400">${t.desc}</div>
+          </td>
+          <td class="py-3 px-3 text-center font-bold text-slate-600">${t.req}</td>
+          <td class="py-3 px-3 text-center font-black ${isPass ? 'text-emerald-600' : 'text-blue-600'}">${t.earned}</td>
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div class="${isPass ? 'bg-emerald-500' : 'bg-blue-600'} h-full rounded-full transition-all" style="width: ${pct}%"></div>
+              </div>
+              <span class="text-[11px] font-bold ${isPass ? 'text-emerald-600' : 'text-slate-500'} w-8 text-right">${pct}%</span>
+            </div>
+          </td>
+          <td class="py-3 px-3 text-center font-bold ${remain > 0 ? 'text-amber-600' : 'text-slate-400'}">
+            ${remain > 0 ? remain + ' 학점' : '0'}
+          </td>
+          <td class="py-3 px-3 text-center">
+            ${isPass 
+              ? `<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-100 text-emerald-800">충족 (PASS)</span>` 
+              : `<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800">미충족</span>`
+            }
+          </td>
+        `;
+        sumTbody.appendChild(tr);
+      });
+
+      const totalPct = Math.min(100, Math.round((totalEarnedActual / 130) * 100));
+      document.getElementById('statTotalEarned').textContent = totalEarnedActual;
+      document.getElementById('statTotalBar').style.width = `${totalPct}%`;
+      
+      const remainTo130 = Math.max(0, 130 - totalEarnedActual);
+      document.getElementById('statRemaining').textContent = remainTo130;
+      const semEst = Math.ceil(remainTo130 / 18);
+      document.getElementById('statSemesterEst').textContent = remainTo130 === 0 ? "졸업 학점 충족 완료!" : `약 ${semEst}학기 분량 남음 (18학점/학기 기준)`;
+
+      document.getElementById('statCompletedCount').textContent = completedAreas;
+      document.getElementById('statTotalCount').textContent = `/ ${targets.length} 영역 완료`;
+      document.getElementById('statPassBadge').textContent = (totalEarnedActual >= 130 && completedAreas === targets.length) 
+        ? "판정: 전 영역 요건 충족 (졸업 가능)" 
+        : "판정: 학점 이수 진행 중";
+
+      document.getElementById('statCourseCount').textContent = courses.length;
+      if (gradeCredits > 0) {
+        const avg = (gradeSum / gradeCredits).toFixed(2);
+        document.getElementById('statAvgGpa').textContent = `평점 ${avg} / 4.5`;
+      } else {
+        document.getElementById('statAvgGpa').textContent = `평점 -`;
+      }
+
+      renderRequiredCoursesSeparate();
+      renderCourseTable();
+    }
+
+    // 3개 전공별 필수과목 분리 렌더링
+    function renderRequiredCoursesSeparate() {
+      const majors = ['회계학', '핀테크', '공공인재'];
+      const containers = {
+        '회계학': document.getElementById('listReqAccounting'),
+        '핀테크': document.getElementById('listReqFintech'),
+        '공공인재': document.getElementById('listReqPublic')
+      };
+      const badges = {
+        '회계학': document.getElementById('badgeReqAccounting'),
+        '핀테크': document.getElementById('badgeReqFintech'),
+        '공공인재': document.getElementById('badgeReqPublic')
+      };
+
+      majors.forEach(m => {
+        const listEl = containers[m];
+        const badgeEl = badges[m];
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        const mItems = requiredList.filter(r => r.major === m);
+        const doneCount = mItems.filter(r => r.checked).length;
+
+        if (badgeEl) {
+          badgeEl.textContent = `${doneCount}/${mItems.length} 완료`;
+          if (mItems.length > 0 && doneCount === mItems.length) {
+            badgeEl.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+          }
+        }
+
+        if (mItems.length === 0) {
+          listEl.innerHTML = `<div class="text-[11px] text-slate-400 py-2 text-center">등록된 필수과목이 없습니다.</div>`;
+          return;
+        }
+
+        mItems.forEach(r => {
+          const div = document.createElement('div');
+          div.className = `flex items-center justify-between p-2 rounded-lg border text-xs transition-all ${
+            r.checked ? 'bg-white border-emerald-300 shadow-xs' : 'bg-white/70 border-slate-200'
+          }`;
+          div.innerHTML = `
+            <label class="flex items-center gap-2 cursor-pointer flex-1">
+              <input type="checkbox" ${r.checked ? 'checked' : ''} onchange="toggleReqItem(${r.id})" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+              <span class="${r.checked ? 'font-bold text-slate-900' : 'text-slate-600'}">${r.name}</span>
+            </label>
+            <button type="button" onclick="deleteReqItem(${r.id})" class="text-slate-300 hover:text-rose-500 ml-1 text-xs" title="삭제">✕</button>
+          `;
+          listEl.appendChild(div);
+        });
+      });
+    }
+
+    function renderCourseTable() {
+      const tbody = document.getElementById('courseTableBody');
+      const emptyNotice = document.getElementById('emptyNotice');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const cntAllEl = document.getElementById('cntAll');
+      if (cntAllEl) cntAllEl.textContent = courses.length;
+
+      let filtered = courses;
+      if (currentFilter !== 'ALL') {
+        filtered = courses.filter(c => c.category.includes(currentFilter));
+      }
+
+      if (filtered.length === 0) {
+        if (emptyNotice) emptyNotice.classList.remove('hidden');
+      } else {
+        if (emptyNotice) emptyNotice.classList.add('hidden');
+      }
+
+      filtered.forEach(c => {
+        const isFailed = (c.grade === 'F' || c.grade === 'NP');
+
+        let gradeBadgeClass = 'bg-slate-100 text-slate-700';
+        if (c.grade.startsWith('A')) gradeBadgeClass = 'bg-blue-100 text-blue-800';
+        else if (c.grade.startsWith('B')) gradeBadgeClass = 'bg-indigo-100 text-indigo-800';
+        else if (c.grade.startsWith('C')) gradeBadgeClass = 'bg-teal-100 text-teal-800';
+        else if (c.grade.startsWith('D')) gradeBadgeClass = 'bg-amber-100 text-amber-800 border border-amber-300';
+        else if (c.grade === 'F' || c.grade === 'NP') gradeBadgeClass = 'bg-rose-100 text-rose-800 border border-rose-300';
+        else if (c.grade === 'P') gradeBadgeClass = 'bg-emerald-100 text-emerald-800';
+
+        // 카테고리 뱃지 색상 분리
+        let catColor = 'bg-slate-100 text-slate-700';
+        if (c.category.startsWith('회계학')) catColor = 'bg-blue-100 text-blue-800 font-bold';
+        else if (c.category.startsWith('핀테크')) catColor = 'bg-indigo-100 text-indigo-800 font-bold';
+        else if (c.category.startsWith('공공인재')) catColor = 'bg-purple-100 text-purple-800 font-bold';
+
+        const tr = document.createElement('tr');
+        tr.className = `hover:bg-slate-50 transition-colors ${isFailed ? 'bg-rose-50/40 text-slate-500' : ''}`;
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-bold ${isFailed ? 'text-rose-900 line-through decoration-rose-400' : 'text-slate-900'}">
+            ${c.name}
+            ${isFailed ? '<span class="text-[11px] font-bold text-rose-600 ml-1 no-underline">[과락·0학점]</span>' : ''}
+          </td>
+          <td class="py-3 px-3">
+            <span class="px-2 py-0.5 rounded text-xs ${catColor}">${c.category}</span>
+          </td>
+          <td class="py-3 px-3 text-center font-bold ${isFailed ? 'text-rose-500 line-through' : 'text-slate-700'}">
+            ${c.credits}학점
+          </td>
+          <td class="py-3 px-3 text-center">
+            <span class="font-black text-xs px-2.5 py-0.5 rounded-full ${gradeBadgeClass}">${c.grade}</span>
+          </td>
+          <td class="py-3 px-4 text-xs text-slate-500">
+            ${isFailed 
+              ? '<span class="text-rose-600 font-semibold">⚠️ 이수 실패 (졸업학점 미반영)</span>' 
+              : (c.isFintechOverlap ? '<span class="inline-flex items-center gap-1 text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">★ 핀테크 부전공 중복 인정</span>' : '-')
+            }
+          </td>
+          <td class="py-3 px-3 text-center">
+            <button type="button" onclick="deleteCourse(${c.id})" class="text-slate-400 hover:text-rose-600 font-bold px-1.5 py-0.5 text-xs transition-colors" title="삭제">
+              삭제
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
