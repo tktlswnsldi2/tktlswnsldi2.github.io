@@ -80,12 +80,14 @@ const portfolioData = {
   skills: {
     financial: [ // 1. 재무 및 관리회계
       { name: "재무회계 (Financial Accounting)", level: "전공 심화", icon: "fa-solid fa-coins" },
-      { name: "원가관리회계 (Cost & Management)", level: "전공 이수", icon: "fa-solid fa-chart-pie" },
+      { name: "관리회계 (Management Accounting)", level: "전공 이수", icon: "fa-solid fa-compass" },
+      { name: "원가회계 & CVP 분석 (Cost Accounting)", level: "전공 이수", icon: "fa-solid fa-chart-pie" },
       { name: "재무제표 분석 (FS Analysis)", level: "심층 분석", icon: "fa-solid fa-chart-line" },
       { name: "회계원리 & 복식부기 원리", level: "완전 숙지", icon: "fa-solid fa-book-open" },
       { name: "K-IFRS 회계기준 이해", level: "학습 중", icon: "fa-solid fa-landmark" }
     ],
     tax: [ // 2. 세무회계 & 경영 지식
+      { name: "세법 (Tax Law)", level: "전공 이수", icon: "fa-solid fa-gavel" },
       { name: "부가가치세법 기초 및 신고", level: "기초 습득", icon: "fa-solid fa-receipt" },
       { name: "법인세법 및 세무조정 원리", level: "학습 중", icon: "fa-solid fa-file-invoice-dollar" },
       { name: "경영학 원론 & 기업윤리", level: "이수 완료", icon: "fa-solid fa-building-columns" },
@@ -175,8 +177,8 @@ const portfolioData = {
       period: "2024.03 - 현재",
       role: "강원대학교 경영대학 회계학과 2학년 재학",
       organization: "강원대학교 (강릉캠퍼스)",
-      description: "재무회계, 원가관리회계, 세법 등 전공 심화 과목을 수강하며 기업 재무제표 분석과 실무 엑셀 활용 능력을 집중적으로 기르고 있습니다.",
-      badges: ["강원대학교", "회계학과", "2학년 재학", "재무회계", "원가관리회계"]
+      description: "재무회계, 관리회계, 원가회계, 세법 등 전공 심화 과목을 수강하며 기업 재무제표 분석과 실무 엑셀 활용 능력을 집중적으로 기르고 있습니다.",
+      badges: ["강원대학교", "회계학과", "2학년 재학", "재무회계", "관리회계", "세법"]
     },
     {
       period: "2023.03 - 2024.02",
